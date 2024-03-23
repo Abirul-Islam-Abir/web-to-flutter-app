@@ -14,11 +14,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Permission.location.request();
-  await Permission.camera.request();
-    if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
-  }
 
   runApp(WebviewApp());
 }

@@ -60,17 +60,15 @@ class _WebviewScreenState extends State<WebviewScreen> {
             children: [
               InAppWebView(
                 key: webViewKey,
-                initialUrlRequest:
-                URLRequest(url: WebUri(widget.loadUrl)),
+                initialUrlRequest: URLRequest(url: WebUri(widget.loadUrl)),
                 initialOptions: InAppWebViewGroupOptions(
                     crossPlatform: InAppWebViewOptions(
-                        javaScriptCanOpenWindowsAutomatically: true,
                         javaScriptEnabled: true,
                         useOnDownloadStart: true,
                         useOnLoadResource: true,
+                        useShouldOverrideUrlLoading: true,
                         cacheEnabled: true,
-                        preferredContentMode:
-                        UserPreferredContentMode.MOBILE,
+                        preferredContentMode: UserPreferredContentMode.MOBILE,
                         useShouldInterceptAjaxRequest: true,
                         mediaPlaybackRequiresUserGesture: true,
                         allowFileAccessFromFileURLs: true,
@@ -79,14 +77,12 @@ class _WebviewScreenState extends State<WebviewScreen> {
                       useHybridComposition: true,
                       allowFileAccess: true,
                       allowContentAccess: true,
-                      blockNetworkLoads: true,
                     ),
                     ios: IOSInAppWebViewOptions(
                       allowsAirPlayForMediaPlayback: true,
                       suppressesIncrementalRendering: true,
                       ignoresViewportScaleLimits: true,
-                      selectionGranularity:
-                      IOSWKSelectionGranularity.DYNAMIC,
+                      selectionGranularity: IOSWKSelectionGranularity.DYNAMIC,
                       isPagingEnabled: true,
                       enableViewportScale: true,
                       sharedCookiesEnabled: true,
@@ -109,13 +105,12 @@ class _WebviewScreenState extends State<WebviewScreen> {
                     urlController.text = this.url;
                   });
                 },
-                androidOnPermissionRequest:
-                    (controller, origin, resources) async =>
+                androidOnPermissionRequest: (controller, origin,
+                        resources) async =>
                     PermissionRequestResponse(
                         resources: resources,
                         action: PermissionRequestResponseAction.GRANT),
-                shouldOverrideUrlLoading:
-                    (controller, navigationAction) async {
+                shouldOverrideUrlLoading: (controller, navigationAction) async {
                   var uri = navigationAction.request.url!;
 
                   if (![
