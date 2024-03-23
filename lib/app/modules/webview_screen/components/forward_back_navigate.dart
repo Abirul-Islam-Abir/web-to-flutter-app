@@ -15,13 +15,13 @@ class ForwardBackNavigate extends StatelessWidget {
       alignment: MainAxisAlignment.center,
       children: <Widget>[
         ElevatedButton(
-          child: Icon(Icons.arrow_back),
+          child: const Icon(Icons.arrow_back),
           onPressed: () {
             webViewController?.goBack();
           },
         ),
         ElevatedButton(
-          child: Icon(Icons.arrow_forward),
+          child: const Icon(Icons.arrow_forward),
           onPressed: () {
             webViewController?.goForward();
           },

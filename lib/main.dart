@@ -1,26 +1,16 @@
 import 'dart:async';
-import 'dart:collection';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
 import 'package:web_to_app/app/app%20info/app_info.dart';
+import 'package:web_to_app/app/modules/splash_screen/view/splash_screen.dart';
 
-import 'app/data/custom_dialog.dart';
-import 'app/modules/webview_screen/webview_screen.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'app/modules/network_connectivity/network_controller.dart';
+import 'app/modules/webview_screen/view/webview_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Permission.location.request();
-  await Permission.camera.request();
-    if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
-  }
 
-  runApp(WebviewApp());
+  runApp(const WebviewApp());
 }
 
 class WebviewApp extends StatelessWidget {
@@ -30,11 +20,10 @@ class WebviewApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    Get.put(NetworkController());
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WebviewScreen(
-        loadUrl: AppInfo.webUrl,
-      ),
+      home: SplashScreen(),
     );
   }
 }

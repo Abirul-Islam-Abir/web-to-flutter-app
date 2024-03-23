@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../main.dart';
-import '../../data/custom_dialog.dart';
-import 'components/forward_back_navigate.dart';
+import '../../../data/custom_dialog.dart';
 
 class WebviewScreen extends StatefulWidget {
-  const WebviewScreen({Key? key, required this.loadUrl}) : super(key: key);
+  const WebviewScreen({super.key, required this.loadUrl});
   final String loadUrl;
+
   @override
   _WebviewScreenState createState() => new _WebviewScreenState();
 }
@@ -43,34 +42,28 @@ class _WebviewScreenState extends State<WebviewScreen> {
       },
     );
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+bool isLoadedScreen = false;
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       onPopInvoked: handleWillPop,
-      child: Scaffold(
-        body: SafeArea(
-          child: Stack(
+      child: SafeArea(
+        child: Scaffold(
+          body: Stack(
             children: [
               InAppWebView(
                 key: webViewKey,
-                initialUrlRequest:
-                URLRequest(url: WebUri(widget.loadUrl)),
+                initialUrlRequest: URLRequest(url: WebUri(widget.loadUrl)),
                 initialOptions: InAppWebViewGroupOptions(
                     crossPlatform: InAppWebViewOptions(
-                        javaScriptCanOpenWindowsAutomatically: true,
                         javaScriptEnabled: true,
                         useOnDownloadStart: true,
                         useOnLoadResource: true,
+                        useShouldOverrideUrlLoading: true,
                         cacheEnabled: true,
-                        preferredContentMode:
-                        UserPreferredContentMode.MOBILE,
+                        preferredContentMode: UserPreferredContentMode.MOBILE,
                         useShouldInterceptAjaxRequest: true,
                         mediaPlaybackRequiresUserGesture: true,
                         allowFileAccessFromFileURLs: true,
@@ -79,14 +72,12 @@ class _WebviewScreenState extends State<WebviewScreen> {
                       useHybridComposition: true,
                       allowFileAccess: true,
                       allowContentAccess: true,
-                      blockNetworkLoads: true,
                     ),
                     ios: IOSInAppWebViewOptions(
                       allowsAirPlayForMediaPlayback: true,
                       suppressesIncrementalRendering: true,
                       ignoresViewportScaleLimits: true,
-                      selectionGranularity:
-                      IOSWKSelectionGranularity.DYNAMIC,
+                      selectionGranularity: IOSWKSelectionGranularity.DYNAMIC,
                       isPagingEnabled: true,
                       enableViewportScale: true,
                       sharedCookiesEnabled: true,
@@ -102,6 +93,7 @@ class _WebviewScreenState extends State<WebviewScreen> {
                     (InAppWebViewController, createWindowRequest) async {
                   InAppWebViewController.addJavaScriptHandler(
                       handlerName: 'openDRMOKWindow', callback: (args) {});
+                  return null;
                 },
                 onLoadStart: (controller, url) {
                   setState(() {
@@ -109,13 +101,11 @@ class _WebviewScreenState extends State<WebviewScreen> {
                     urlController.text = this.url;
                   });
                 },
-                androidOnPermissionRequest:
-                    (controller, origin, resources) async =>
+                androidOnPermissionRequest: (controller, origin, resources) async =>
                     PermissionRequestResponse(
                         resources: resources,
                         action: PermissionRequestResponseAction.GRANT),
-                shouldOverrideUrlLoading:
-                    (controller, navigationAction) async {
+                shouldOverrideUrlLoading: (controller, navigationAction) async {
                   var uri = navigationAction.request.url!;
 
                   if (![
@@ -155,7 +145,7 @@ class _WebviewScreenState extends State<WebviewScreen> {
                   }
                   setState(() {
                     this.progress = progress / 100;
-                    urlController.text = this.url;
+                    urlController.text = url;
                   });
                 },
                 onUpdateVisitedHistory: (controller, url, androidIsReload) {
@@ -168,9 +158,11 @@ class _WebviewScreenState extends State<WebviewScreen> {
                   print(consoleMessage);
                 },
               ),
-              progress < 1.0
-                  ? LinearProgressIndicator(value: progress)
-                  : Container(),
+               Positioned(
+                 bottom: 0,right: 50,left: 50,
+                 child: progress < 1.0
+                   ? CircularProgressIndicator(value: progress)
+                   : Container(),)
             ],
           ),
         ),
@@ -184,13 +176,18 @@ class _WebviewScreenState extends State<WebviewScreen> {
     final now = DateTime.now();
     final backButtonHasNotBeenPressedOrSnackBarHasBeenClosed =
         backButtonPressTime == null ||
-            now.difference(backButtonPressTime!) > Duration(seconds: 5);
+            now.difference(backButtonPressTime!) > const Duration(seconds: 2);
 
-    if (backButtonHasNotBeenPressedOrSnackBarHasBeenClosed) {
-      backButtonPressTime = now;
-      CustomDialog.onBackPressed(context);
+    if (await webViewController!.canGoBack()) {
+      webViewController!.goBack();
+      return false;
+    } else {
+      if (backButtonHasNotBeenPressedOrSnackBarHasBeenClosed) {
+        backButtonPressTime = now;
+        CustomDialog.onBackPressed(context);
+        return false;
+      }
       return false;
     }
-    return false;
   }
 }
