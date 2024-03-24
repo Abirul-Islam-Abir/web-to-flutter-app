@@ -73,7 +73,8 @@ class _WebviewScreenState extends State<WebviewScreen> {
                       useHybridComposition: true,
                       allowFileAccess: true,
                       allowContentAccess: true,
-                      geolocationEnabled: true,saveFormData: true,
+                      geolocationEnabled: true,
+                      saveFormData: true,
                     ),
                     ios: IOSInAppWebViewOptions(
                       allowsAirPlayForMediaPlayback: true,
@@ -93,7 +94,7 @@ class _WebviewScreenState extends State<WebviewScreen> {
                 },
                 onCreateWindow:
                     (inAppWebViewController, createWindowRequest) async {
-                      inAppWebViewController.addJavaScriptHandler(
+                  inAppWebViewController.addJavaScriptHandler(
                       handlerName: 'openDRMOKWindow', callback: (args) {});
                   return null;
                 },
@@ -159,10 +160,9 @@ class _WebviewScreenState extends State<WebviewScreen> {
                 },
                 onConsoleMessage: (controller, consoleMessage) {
                   print(consoleMessage.message);
-
                 },
               ),
-          /*    Positioned(
+              /*    Positioned(
                 bottom: 0,
                 right: 200,
                 left: 200,
@@ -183,7 +183,8 @@ class _WebviewScreenState extends State<WebviewScreen> {
     final now = DateTime.now();
     final backButtonHasNotBeenPressedOrSnackBarHasBeenClosed =
         backButtonPressTime == null ||
-            now.difference(backButtonPressTime!) > const Duration(microseconds:1);
+            now.difference(backButtonPressTime!) >
+                const Duration(microseconds: 1);
 
     if (await webViewController!.canGoBack()) {
       webViewController!.goBack();
