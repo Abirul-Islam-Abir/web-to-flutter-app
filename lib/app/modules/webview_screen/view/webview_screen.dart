@@ -42,7 +42,8 @@ class _WebviewScreenState extends State<WebviewScreen> {
       },
     );
   }
-bool isLoadedScreen = false;
+
+  bool isLoadedScreen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +73,7 @@ bool isLoadedScreen = false;
                       useHybridComposition: true,
                       allowFileAccess: true,
                       allowContentAccess: true,
+                      geolocationEnabled: true,saveFormData: true,
                     ),
                     ios: IOSInAppWebViewOptions(
                       allowsAirPlayForMediaPlayback: true,
@@ -90,8 +92,8 @@ bool isLoadedScreen = false;
                   webViewController = controller;
                 },
                 onCreateWindow:
-                    (InAppWebViewController, createWindowRequest) async {
-                  InAppWebViewController.addJavaScriptHandler(
+                    (inAppWebViewController, createWindowRequest) async {
+                      inAppWebViewController.addJavaScriptHandler(
                       handlerName: 'openDRMOKWindow', callback: (args) {});
                   return null;
                 },
@@ -101,7 +103,8 @@ bool isLoadedScreen = false;
                     urlController.text = this.url;
                   });
                 },
-                androidOnPermissionRequest: (controller, origin, resources) async =>
+                androidOnPermissionRequest: (controller, origin,
+                        resources) async =>
                     PermissionRequestResponse(
                         resources: resources,
                         action: PermissionRequestResponseAction.GRANT),
@@ -155,28 +158,32 @@ bool isLoadedScreen = false;
                   });
                 },
                 onConsoleMessage: (controller, consoleMessage) {
-                  print(consoleMessage);
+                  print(consoleMessage.message);
+
                 },
               ),
-               Positioned(
-                 bottom: 0,right: 50,left: 50,
-                 child: progress < 1.0
-                   ? CircularProgressIndicator(value: progress)
-                   : Container(),)
+          /*    Positioned(
+                bottom: 0,
+                right: 200,
+                left: 200,
+                child: progress < 1.0
+                    ? Center(child: CircularProgressIndicator(value: progress))
+                    : Container(),
+              )*/
             ],
           ),
         ),
       ),
     );
   }
-//iiiiiiiiiiiiiiiiiii
+
   DateTime? backButtonPressTime;
 
   Future<bool> handleWillPop(data) async {
     final now = DateTime.now();
     final backButtonHasNotBeenPressedOrSnackBarHasBeenClosed =
         backButtonPressTime == null ||
-            now.difference(backButtonPressTime!) > const Duration(seconds: 2);
+            now.difference(backButtonPressTime!) > const Duration(microseconds:1);
 
     if (await webViewController!.canGoBack()) {
       webViewController!.goBack();

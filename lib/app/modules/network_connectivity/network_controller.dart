@@ -75,7 +75,7 @@ void showNetworkSnackBar() {
     title: 'No Internet!',
     message: 'Please check your internet connection!',
     isDismissible: false,
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.grey,
     showProgressIndicator: true,
   ));
 
