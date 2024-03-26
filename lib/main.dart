@@ -10,20 +10,5 @@ import 'app/modules/webview_screen/view/webview_screen.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const WebviewApp());
-}
-
-class WebviewApp extends StatelessWidget {
-  const WebviewApp({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    Get.put(NetworkController());
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
-    );
-  }
+  //runApp(const WebviewApp());
 }
