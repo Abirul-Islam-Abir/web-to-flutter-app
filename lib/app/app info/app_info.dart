@@ -1,7 +1,7 @@
  class AppInfo {
    //static String webUrl = "https://welldiv.com/erp/";
    // static String webUrl = "https://flutter.dev/";
-    static String webUrl = "https://www.github.com/";
+    static String webUrl = "https://www.fiverr.com/";
     //static String webUrl = "https://erp.gseba.com/webapp/";
    static String appName = 'Website To Flutter';
    static String packageName = 'com.example.amin_agent';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:web_to_app/app/app%20info/app_info.dart';
-import 'package:web_to_app/app/modules/webview_screen/view/webview_screen.dart';
+ import 'package:web_to_app/app/modules/webview_screen/view/webview_screen.dart';
 
 import '../../../data/app_images.dart';
 import '../../../theme/app_colors.dart';
@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             children: [
               const Spacer(),
-              Container(
+              SizedBox(
                   width: MediaQuery.of(context).size.width / 1.5,
                   height: MediaQuery.of(context).size.width / 2,
                   child: Image.asset(AppImages.splashLogo)),
